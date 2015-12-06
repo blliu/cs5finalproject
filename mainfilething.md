@@ -1,5 +1,5 @@
 # cs5finalproject
-vpython woo! testestestestestesttestestest
+# vpython woo! 
 #
 # Names: Priscilla Chu and Briana Liu
 #
