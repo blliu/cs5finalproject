@@ -50,7 +50,7 @@ def make_sheep():
 
     return sheep
 
-def make_flowers():
+def make_flower():
     """ makes flower """
     # color=(1,0.7,0.2)
     flower1 = frame( pos=(9,0,-9))
@@ -91,8 +91,8 @@ def main():
     sheep = make_sheep()
     sheep.vel = vector(0,0,0)  # no velocity (yet!)
 
-    flower1 = make_flowers()
-    flower2 = make_flowers2()
+    flower1 = make_flower()
+    flower2 = make_flower2()
     flower1.vel = vector(0,0,0)
     flower2.vel = vector(0,0,0)
 
