@@ -51,7 +51,7 @@ def make_sheep():
     return sheep
 
 def make_flowers():
-    """ makes flowers """
+    """ makes flower """
     # color=(1,0.7,0.2)
     flower1 = frame( pos=(9,0,-9))
     ellipsoid(frame=flower1, pos=(0,0,0), 
@@ -61,7 +61,8 @@ def make_flowers():
 
     return flower1
 
-def make_flowers2():
+def make_flower2():
+    """ makes second flower """
     flower2 = frame( pos=(7,0,-7))
     ellipsoid(frame=flower2, pos=(0,0,0), 
           length=3, height=1, width=1, color = color.yellow)
