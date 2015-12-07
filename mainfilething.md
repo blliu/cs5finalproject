@@ -1,5 +1,3 @@
-# cs5finalproject
-# vpython woo! 
 #
 # Names: Priscilla Chu and Briana Liu
 #
@@ -9,7 +7,6 @@ import random
 
 def make_walls():
     """makes several walls and returns them in a list
-        Docs here:  http://vpython.org/contents/docs/box.html
     """
     w0 = box(pos=(-20,0,0), axis=(0,0,1), 
              length=40, width=1, height = 2, color=color.red)
@@ -25,16 +22,16 @@ def make_walls():
 def make_maze():
     """makes walls that stick out of the walls to make a maze
     """
-    w0 = box(pos=(-20,0,0), axis=(0,0,1), 
-             length=40, width=1, height = 2, color=color.blue)
-    w1 = box(pos=(0,0,-20), axis=(1,0,0), 
-             length=40, width=1, height = 2, color=color.blue)
-    w2 = box(pos=(0,0,20), axis=(1,0,0), 
-             length=40, width=1, height = 2, color=color.blue)
-    w3 = box(pos=(20,0,0), axis=(0,0,1), 
-             length=40, width=1, height = 2, color=color.blue)
-    list_of_walls = [ w0, w1, w2, w3 ]
-    return list_of_walls
+    m0 = box(pos=(-9,0,-7), axis=(1,0,0), 
+             length=25, width=3, height = 2, color=color.blue)
+    m1 = box(pos=(0,0,-20), axis=(1,0,0), 
+             length=20, width=1, height = 2, color=color.blue)
+    m2 = box(pos=(0,0,20), axis=(1,0,0), 
+             length=20, width=1, height = 2, color=color.blue)
+    m3 = box(pos=(9,0,7), axis=(1,0,0), 
+             length=25, width=3, height = 2, color=color.blue)
+    list_of_maze = [ m0, m1, m2, m3 ]
+    return list_of_maze
 
 def make_sheep():
     """ makes a sheep!
@@ -51,7 +48,7 @@ def make_sheep():
     return sheep
 
 def make_flower():
-    """ makes flower """
+    """ makes a flower """
     # color=(1,0.7,0.2)
     flower1 = frame( pos=(9,0,-9))
     ellipsoid(frame=flower1, pos=(0,0,0), 
@@ -62,7 +59,7 @@ def make_flower():
     return flower1
 
 def make_flower2():
-    """ makes second flower """
+    """ makes a flower """
     flower2 = frame( pos=(7,0,-7))
     ellipsoid(frame=flower2, pos=(0,0,0), 
           length=3, height=1, width=1, color = color.yellow)
@@ -85,6 +82,9 @@ def main():
     Walls = make_walls()
     w0, w1, w2, w3 = Walls   # and gives each one a name...
 
+    Maze = make_maze()
+    m0, m1, m2, m3 = Maze
+
     wolf = sphere( radius=1, pos=(0,0,0), color=(1,0.7,0.2) )
     wolf.vel = vector(0,0,0)   # this is the "game piece" w/ zero starting vel.
     
@@ -103,18 +103,18 @@ def main():
     # We set some variables to control the display and the event loop
     RATE = 30             # number of loops per second to run, if possible!
     dt = 1.0/(1.0*RATE)   # the amount of time per loop (again, if possible)
-    autocenter = True     # do you want vPython to keep the scene centered?
+    
 
     # this is the main loop of the program! it's "time" or the "event loop"
     while True:
         rate(RATE)     # run no faster than RATE loops/second
-
+        autocenter = False    # do you want vPython to keep the scene centered?
         # +++++ start of all position updates: once per loop +++++ 
 
         flower1.pos = flower1.pos + flower1.vel*dt           # PHYSICS!
         flower2.pos = flower2.pos + flower2.vel*dt
         sheep.pos = sheep.pos + sheep.vel*dt
-
+   
 
         # +++++ end of all once-per-loop position updates +++++ 
 
@@ -181,7 +181,8 @@ def main():
 
             # space to stop everything
             if s == ' ':  # space to stop things
-                flower.vel = vector(0,0,0)
+                flower1.vel = vector(0,0,0)
+                flower2.vel = vector(0,0,0)
                 sheep.vel = vector(0,0,0)
                 wolf.vel = vector(0,0,0)
 
@@ -189,8 +190,8 @@ def main():
             if s == 'R':
                 sheep.vel = vector(0,0,0)
                 sheep.pos = vector(0,0,0)
-                flower.vel = vector(0,0,0)
-                flower.pos = vector(-10,0,random.uniform(-10,10))
+                flower1.vel = vector(0,0,0)
+                flower1.pos = vector(-10,0,random.uniform(-10,10))
                 wolf.vel = vector(0,0,0)
                 wolf.pos = vector(0,0,0)
     
