@@ -1,0 +1,333 @@
+#
+# Names: Priscilla Chu and Briana Liu
+#
+
+from visual import *
+import random
+
+def make_walls():
+    """makes several walls and returns them in a list
+    """
+    w0 = box(pos=(-20,0,0), axis=(0,0,1), 
+             length=60, width=1, height = 2, color=color.green)
+    w1 = box(pos=(0,0,-30), axis=(1,0,0), 
+             length=40, width=1, height = 2, color=color.green)
+    w2 = box(pos=(0,0,30), axis=(1,0,0), 
+             length=40, width=1, height = 2, color=color.green)
+    w3 = box(pos=(20,0,0), axis=(0,0,1), 
+             length=60, width=1, height = 2, color=color.green)
+    list_of_walls = [ w0, w1, w2, w3 ]
+    return list_of_walls
+
+def make_maze():
+    """makes walls that stick out of the walls to make a maze
+    """
+    m0 = box(pos=(-8,0,-20), axis=(1,0,0), 
+             length=25, width=3, height = 2, color=color.green)
+    m1 = box(pos=(-8,0,20), axis=(1,0,0), 
+             length=25, width=3, height = 2, color=color.green)
+    m2 = box(pos=(8,0,0), axis=(1,0,0), 
+             length=25, width=3, height = 2, color=color.green)
+    list_of_maze = [ m0, m1, m2 ]
+    return list_of_maze
+
+def make_sheep():
+    """ makes a sheep!
+    """
+    sheep = frame( pos=(-15,0,-27) )  # makes a new "frame" == a container
+    # with a local coordinate system that can have any number of parts...
+    # here are the "parts":
+    # doesn't show up.. sphere(frame=sheep, radius =0.4, pos =(-.4,-.2,-.4), color=color.black)
+    sphere( frame=sheep, radius=1, color=color.white )
+    sphere( frame=sheep, radius=0.6, pos =(.5,.5,1), color=color.black )
+    sphere( frame=sheep, radius=0.3, pos =(-.5,.5,-.5), color=color.black )
+
+
+    return sheep
+
+def make_flower():
+    """ makes a flower """
+    # color=(1,0.7,0.2)
+    flower1 = frame( pos=(-15,0,27))
+    ellipsoid(frame=flower1, pos=(0,0,0), 
+          length=3, height=1, width=1, color = color.magenta)
+    ellipsoid(frame=flower1, pos=(0,0,0), 
+          length=1, height=1, width=3, color = color.magenta)
+
+    return flower1
+
+def make_flower2():
+    """ makes a flower """
+    flower2 = frame( pos=(-15,0,24))
+    ellipsoid(frame=flower2, pos=(0,0,0), 
+          length=3, height=1, width=1, color = color.yellow)
+    ellipsoid(frame=flower2, pos=(0,0,0), 
+          length=1, height=1, width=3, color = color.yellow)
+
+    return flower2
+
+
+def main():
+    """ this is the main function, including
+        all of the data objects and the "event loop"
+        which is the while True: loop that will
+        be the universe's "time stream" :-)
+    """
+    # create an object named floor of class (type) box:
+    floor = box(pos=(0,-1,0), length=40, width=60, height = 0.5, color=(0,.5,0))
+
+    # this creates a list of walls 
+    Walls = make_walls()
+    w0, w1, w2, w3 = Walls   # and gives each one a name...
+
+    Maze = make_maze()
+    m0, m1, m2 = Maze
+
+    wolf1 = sphere( radius=1, pos=(10,0,-20), color=(1,0.7,0.2) )
+    wolf1.vel = vector(0,0,0)   # this is the "game piece" w/ zero starting vel.
+
+    wolf2 = sphere( radius=1, pos=(-10,0,10), color=(1,0.7,0.2) )
+    wolf2.vel = vector(0,0,0)   # this is the "game piece" w/ zero starting vel.
+
+    sleepysheep1 = sphere( radius=1, pos=(5,0,-5), color=color.white )
+    sleepysheep1.vel = vector(0,0,0)   # this is the "game piece" w/ zero starting vel.
+
+    sleepysheep2 = sphere( radius=1, pos=(8,0,-8), color=color.white )
+    sleepysheep2.vel = vector(0,0,0)   # this is the "game piece" w/ zero starting vel.
+
+    rock1 = sphere( radius=1.5, pos=(3.5,0,20), color=color.green )
+    rock1.vel = vector(0,0,0)   # this is the "game piece" w/ zero starting vel.
+    
+    rock2 = sphere( radius=1.5, pos=(3.5,0,-20), color=color.green )
+    rock2.vel = vector(0,0,0) 
+
+    rock3 = sphere( radius=1.5, pos=(-4,0,0), color=color.green)
+    rock3.vel = vector(0,0,0) 
+
+    sheep = make_sheep()
+    sheep.vel = vector(0,0,0)  # no velocity (yet!)
+
+    flower1 = make_flower()
+    flower2 = make_flower2()
+    flower1.vel = vector(0,0,0)
+    flower2.vel = vector(0,0,0)
+
+    # color names? they are black, blue, cyan, green, gray(v), 0.0<=v<=1.0
+    #                       magenta, orange, red, white, yellow
+    # or you can use rgb tuples (from 0.0 to 1.0, not 0 to 255), e.g.,
+    
+    # We set some variables to control the display and the event loop
+    RATE = 30             # number of loops per second to run, if possible!
+    dt = 1.0/(1.0*RATE)   # the amount of time per loop (again, if possible)
+    
+    # list of things that can collide:
+
+    L = [sheep, sleepysheep1, sleepysheep2]
+
+    # this is the main loop of the program! it's "time" or the "event loop"
+    while True:
+        rate(RATE)     # run no faster than RATE loops/second
+        autocenter = False    # do you want vPython to keep the scene centered?
+        # +++++ start of all position updates: once per loop +++++ 
+
+        flower1.pos = flower1.pos + flower1.vel*dt           # PHYSICS!
+        flower2.pos = flower2.pos + flower2.vel*dt
+        sheep.pos = sheep.pos + sheep.vel*dt
+        for s in L:
+            s.pos += dt*s.vel
+
+        # collision checking and response: ideal, elastic collisions
+        for i in range(len(L)):
+            for j in range(i+1,len(L)):
+                # diff = the vector between the two
+                diff = L[i].pos - L[j].pos
+                dtan = rotate( diff, radians(90), vector(0,1,0) )
+                # if they're too close...
+                if mag( diff ) < 2:
+                    # get the two velocities
+                    vi = L[i].vel
+                    vj = L[j].vel
+                    # undo the last time step
+                    L[i].pos -= L[i].vel*dt
+                    L[j].pos -= L[j].vel*dt
+                    # find the radial and tangent parts
+                    vi_rad = proj(vi, diff)
+                    vi_tan = proj(vi, dtan)
+                    vj_rad = proj(vj, -diff)
+                    vj_tan = proj(vj, dtan)
+                    # swap the radials and keep the tangents
+                    L[i].vel =  vj_rad + vi_tan
+                    L[j].vel =  vi_rad + vj_tan
+
+   
+
+        # +++++ end of all once-per-loop position updates +++++ 
+
+        # ----- start of other checks - especially *collisions* -----
+
+        # collision check for the wolf(ves) and sheep...
+        # vector docs:   http://vpython.org/contents/docs/vector.html
+        vec_from_wolf1_to_sheep = wolf1.pos - sheep.pos
+        if mag( vec_from_wolf1_to_sheep ) < wolf1.radius:
+            print "You've killed the sheep! *floats to sheep heaven*..."
+            sheep.vel = vector(0,5,0)
+
+        vec_from_wolf2_to_sheep = wolf2.pos - sheep.pos
+        if mag( vec_from_wolf2_to_sheep ) < wolf2.radius:
+            print "You've killed the sheep! *floats to sheep heaven*..."
+            sheep.vel = vector(0,5,0)
+    
+        # collision check for the sheep and flower(s)...
+        # vector docs:   http://vpython.org/contents/docs/vector.html
+        vec_from_sheep_to_flower1 = flower1.pos - sheep.pos
+        if mag( vec_from_sheep_to_flower1 ) < 1:
+            print "Flowers are yummy!!"
+            flower1.vel = vector(0,5,0)
+
+
+        vec_from_sheep_to_flower2 = flower2.pos - sheep.pos
+        if mag( vec_from_sheep_to_flower2 ) < 1:
+            print "Flowers are yummy!!"
+            flower2.vel = vector(0,5,0)
+
+        vec_from_sheep_to_rock1 = rock1.pos - sheep.pos
+        if mag( vec_from_sheep_to_rock1 ) < rock1.radius:
+            sheep.vel *= -1.0
+
+        vec_from_sheep_to_rock2 = rock2.pos - sheep.pos
+        if mag( vec_from_sheep_to_rock2 ) < rock2.radius:
+            sheep.vel *= -1.0
+
+        vec_from_sheep_to_rock3 = rock3.pos - sheep.pos
+        if mag( vec_from_sheep_to_rock3 ) < rock3.radius:
+            sheep.vel *= -1.0
+
+
+        
+        # need to handle wall collisions next...
+        # here is an example of one wall collision - you'll need more!
+        
+        # colliding with wall 0, w0:
+        for s in L:
+            if s.pos.x < w0.pos.x:  # w0 has the smallest x value
+                s.pos.x = w0.pos.x  # make sure we stay in bounds
+                s.vel.x = -1.0 * s.vel.x   # bounce (in the x direction)
+            if s.pos.z < w1.pos.z:
+                s.pos.z = w1.pos.z
+                s.vel.z = -1.0 * s.vel.z
+            if s.pos.z > w2.pos.z:  
+                s.pos.z = w2.pos.z  
+                s.vel.z = -1.0 * s.vel.z  
+            if s.pos.x > w3.pos.x:
+                s.pos.x = w3.pos.x
+                s.vel.x = -1.0 * s.vel.x
+            if s.pos.x < m0.pos.x + 15:
+                if s.pos.z < m0.pos.z and s.pos.z > m0.pos.z - 1.5 :  
+                    #sheep.pos.z = m0.pos.z
+                    s.vel.z = -1.0 * s.vel.z
+                if s.pos.z > m0.pos.z and s.pos.z < m0.pos.z + 1.5:  
+                    #sheep.pos.z = m0.pos.z
+                    s.vel.z = -1.0 * s.vel.z 
+            if s.pos.x < m1.pos.x + 15:
+                if s.pos.z < m1.pos.z and s.pos.z > m1.pos.z - 1.5 :  
+                    #sheep.pos.z = m0.pos.z
+                    s.vel.z = -1.0 * s.vel.z
+                if s.pos.z > m1.pos.z and s.pos.z < m1.pos.z + 1.5:  
+                    #sheep.pos.z = m0.pos.z
+                    s.vel.z = -1.0 * s.vel.z   
+            if s.pos.x > m2.pos.x - 15:
+                if s.pos.z < m2.pos.z and s.pos.z > m2.pos.z - 1.5 :  
+                    #sheep.pos.z = m0.pos.z
+                    s.vel.z = -1.0 * s.vel.z
+                if s.pos.z > m2.pos.z and s.pos.z < m2.pos.z + 1.5:  
+                    #sheep.pos.z = m0.pos.z
+                    s.vel.z = -1.0 * s.vel.z  
+         
+    
+
+        # ----- end of other checks - especially *collisions*  -----
+
+
+
+
+        # ===== handling user events: keypresses and mouse =====
+
+        # here, we see if the user has pressed any keys
+        if scene.kb.keys:   # any keypress to be handled?
+            s = scene.kb.getkey()
+            print "You pressed the key", s  
+
+            # Key presses to give the ball velocity (in the x-z plane)
+            dx = .5; dz = .5   # easily-changeable values
+            if s == 'left': sheep.vel += vector(-dx,0,0)
+            if s == 'right': sheep.vel += vector(dx,0,0)
+            if s == 'up': sheep.vel += vector(0,0,-dz)
+            if s == 'down': sheep.vel += vector(0,0,dz)
+
+            # space to stop everything
+            if s == ' ':  # space to stop things
+                flower1.vel = vector(0,0,0)
+                flower2.vel = vector(0,0,0)
+                sheep.vel = vector(0,0,0)
+                wolf.vel = vector(0,0,0)
+
+            # capital R to reset things
+            if s == 'R':
+                sheep.vel = vector(0,0,0)
+                sheep.pos = (-15,0,-27)
+                flower1.vel = vector(0,0,0)
+                flower1.pos = (-15,0,27)
+                flower2.vel = vector(0,0,0)
+                flower2.pos = (-15,0,24)
+                wolf1.vel = vector(0,0,0)
+                wolf1.pos = (10,0,-20)
+                wolf2.vel = vector(0,0,0)
+                wolf2.pos = (-10,0,10)
+                sleepysheep1.vel = vector(0,0,0)
+                sleepysheep1.pos = (5,0,-5)
+                sleepysheep2.vel = vector(0,0,0)
+                sleepysheep2.pos = (8,0,-8)
+
+
+            #GRUTOR MODE (makes wolves disappear!!)
+            if s == 'G':
+                print "The wolves heard about your almighty grutor power and hid!"
+                sheep.vel = vector(0,0,0)
+                sheep.pos = (-15,0,-27)
+                flower1.vel = vector(0,0,0)
+                flower1.pos = (-15,0,27)
+                flower2.vel = vector(0,0,0)
+                flower2.pos = (-15,0,24)
+                wolf1.vel = vector(0,0,0)
+                wolf1.pos = (-17,-5,19) #hides wolf under board
+                wolf2.vel = vector(0,0,0)
+                wolf2.pos = (-10,-5,19) #hides wolf under board
+                sleepysheep1.vel = vector(0,0,0)
+                sleepysheep1.pos = (5,0,-5)
+                sleepysheep2.vel = vector(0,0,0)
+                sleepysheep2.pos = (8,0,-8)
+
+    
+            if s == 'Q':  # Quit!
+                print "Quitting..."
+                break  # breaks out of the main loop
+
+            # mouse is better handled only when a particular key is pressed
+            # see http://vpython.org/contents/docs/mouse.html for more
+
+        # ===== end of handling user events: keypresses and mouse =====
+
+    print "Done with the main loop. Ending this vPython session..."
+    print "Close the vPython window to finish."
+# this ends the main() function - it tends to get large!
+
+
+# This should be the FINAL thing in the file...
+if __name__ == "__main__":   # did we just RUN this file?
+    main()                   # if so, we call main()
+
+
+
+
+
+
