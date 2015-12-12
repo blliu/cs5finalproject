@@ -1,0 +1,36 @@
+To-Do List:
+
+-Win???
+
+-changed what happens when the sheep touches flower 1/flower2
+-changed wolves' colors
+-adding prof mode
+-fixed space mode (pause everything)
+
+
+    wolf1 = sphere( radius=1, pos=(10,0,-20), color=(0.55, 0.27, 0.07) )
+    wolf1.vel = vector(0,0,0)   # this is the "game piece" w/ zero starting vel.
+
+    wolf2 = sphere( radius=1, pos=(-10,0,10), color=(0.55, 0.27, 0.07) )
+    wolf2.vel = vector(0,0,0)   # this is the "game piece" w/ zero starting vel.
+    
+    
+    
+    
+    if s == 'P':
+                print "Since profs should not have to waste time playing silly games..." 
+                print "NOTE: Requires effort to not win (almost) immediately!"
+                sheep.vel = vector(0,0,0)
+                sheep.pos = (-15,0,-27)
+                flower1.vel = vector(0,0,0) 
+                flower1.pos = (-12,0,-27)
+                flower2.vel = vector(0,0,0)
+                flower2.pos = (-15,0,-24)
+                wolf1.vel = vector(0,0,0)
+                wolf1.pos = (-17,-5,19) #hides wolf under board
+                wolf2.vel = vector(0,0,0)
+                wolf2.pos = (-10,-5,19) #hides wolf under board
+                sleepysheep1.vel = vector(0,0,0)
+                sleepysheep1.pos = (5,0,-5)
+                sleepysheep2.vel = vector(0,0,0)
+                sleepysheep2.pos = (8,0,-8)
