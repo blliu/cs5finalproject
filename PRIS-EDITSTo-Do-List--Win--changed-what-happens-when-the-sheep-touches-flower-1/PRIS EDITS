@@ -34,3 +34,22 @@ To-Do List:
                 sleepysheep1.pos = (5,0,-5)
                 sleepysheep2.vel = vector(0,0,0)
                 sleepysheep2.pos = (8,0,-8)
+                
+                
+    vec_from_sheep_to_flower1 = flower1.pos - sheep.pos
+    if mag( vec_from_sheep_to_flower1 ) < 1:
+        print "Flowers are yummy!! The sheep is safe now! YOU WIN."
+        flower1.vel = vector(0,5,0)
+        break
+
+
+    vec_from_sheep_to_flower2 = flower2.pos - sheep.pos
+    if mag( vec_from_sheep_to_flower2 ) < 1:
+        print "*munch munch* Good job, you saved the sheep! :)"
+        flower2.vel = vector(0,5,0)
+        break
+                
+                
+                
+                
+    
